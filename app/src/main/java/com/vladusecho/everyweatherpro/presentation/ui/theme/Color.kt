@@ -1,4 +1,4 @@
-package com.vladusecho.everyweatherpro.ui.theme
+package com.vladusecho.everyweatherpro.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
