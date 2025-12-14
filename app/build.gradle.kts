@@ -1,3 +1,5 @@
+import com.android.build.api.variant.BuildConfigField
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -38,6 +40,19 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
+    }
+}
+
+androidComponents {
+
+    val key = property("key")?.toString()
+
+    onVariants { variant ->
+        variant.buildConfigFields?.put(
+            "WEATHER_API_KEY",
+            BuildConfigField("String", "\"$key\"", "Api key for weather service")
+        )
     }
 }
 
