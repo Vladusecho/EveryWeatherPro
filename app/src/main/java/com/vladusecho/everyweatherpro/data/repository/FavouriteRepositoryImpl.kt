@@ -18,6 +18,8 @@ class FavouriteRepositoryImpl @Inject constructor(
 
     override fun observeIsFavourite(id: Int): Flow<Boolean> = favouriteCitiesDao.observeIsFavourite(id)
 
+    override fun checkIsFavourite(id: Int): Boolean = favouriteCitiesDao.checkIsFavourite(id)
+
     override suspend fun addToFavourite(city: City) = favouriteCitiesDao
         .addToFavourite(city.toDbModel())
 

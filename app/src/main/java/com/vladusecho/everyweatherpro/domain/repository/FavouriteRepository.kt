@@ -9,6 +9,8 @@ interface FavouriteRepository {
 
     fun observeIsFavourite(id: Int): Flow<Boolean>
 
+    fun checkIsFavourite(id: Int): Boolean
+
     suspend fun addToFavourite(city: City)
 
     suspend fun removeFromFavourite(id: Int)
