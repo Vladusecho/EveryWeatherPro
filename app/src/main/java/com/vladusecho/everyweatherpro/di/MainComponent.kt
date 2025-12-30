@@ -1,6 +1,7 @@
 package com.vladusecho.everyweatherpro.di
 
 import android.content.Context
+import com.vladusecho.everyweatherpro.presentation.MainActivity
 import dagger.BindsInstance
 import dagger.Component
 
@@ -12,6 +13,8 @@ import dagger.Component
     ]
 )
 interface MainComponent {
+
+    fun inject(activity: MainActivity)
 
     @Component.Factory
     interface Factory {
