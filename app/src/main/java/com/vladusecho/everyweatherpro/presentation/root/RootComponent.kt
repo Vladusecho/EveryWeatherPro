@@ -5,6 +5,7 @@ import com.arkivanov.decompose.value.Value
 import com.vladusecho.everyweatherpro.presentation.details.DetailsComponent
 import com.vladusecho.everyweatherpro.presentation.favourite.FavouriteComponent
 import com.vladusecho.everyweatherpro.presentation.search.SearchComponent
+import kotlinx.coroutines.flow.StateFlow
 
 interface RootComponent {
 

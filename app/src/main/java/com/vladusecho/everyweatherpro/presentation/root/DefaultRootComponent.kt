@@ -29,11 +29,10 @@ class DefaultRootComponent @AssistedInject constructor (
 
     private val navigation = StackNavigation<Config>()
 
-    override val stack: Value<ChildStack<Config, RootComponent.Child>> = childStack(
+    override val stack: Value<ChildStack<*, RootComponent.Child>> = childStack(
         source = navigation,
-        initialStack = { listOf(Config.Favourite) },
-        saveStack = TODO(),
-        restoreStack = TODO(),
+        initialConfiguration = Config.Favourite,
+        serializer = null,
         handleBackButton = true,
         childFactory = ::child
     )

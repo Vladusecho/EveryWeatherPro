@@ -6,9 +6,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.arkivanov.decompose.defaultComponentContext
 import com.vladusecho.everyweatherpro.WeatherApp
+import com.vladusecho.everyweatherpro.domain.usecases.ChangeFavouriteStateUseCase
+import com.vladusecho.everyweatherpro.domain.usecases.GetFavouriteCitiesUseCase
+import com.vladusecho.everyweatherpro.domain.usecases.SearchCityUseCase
 import com.vladusecho.everyweatherpro.presentation.root.DefaultRootComponent
 import com.vladusecho.everyweatherpro.presentation.root.RootContent
 import com.vladusecho.everyweatherpro.presentation.ui.theme.EveryWeatherProTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
@@ -18,9 +24,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (applicationContext as WeatherApp).component.inject(this)
-        val root = rootComponentFactory.create(defaultComponentContext())
-
         super.onCreate(savedInstanceState)
+        val root = rootComponentFactory.create(defaultComponentContext())
         enableEdgeToEdge()
         setContent {
             RootContent(root)
