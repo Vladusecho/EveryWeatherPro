@@ -10,6 +10,7 @@ import com.vladusecho.everyweatherpro.domain.usecases.ChangeFavouriteStateUseCas
 import com.vladusecho.everyweatherpro.domain.usecases.SearchCityUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 interface SearchStore : Store<SearchStore.Intent, SearchStore.State, SearchStore.Label> {
@@ -126,8 +127,12 @@ class SearchStoreFactory @Inject constructor(
                     searchJob?.cancel()
                     searchJob = scope.launch {
                         dispatch(Msg.LoadingSearchResult)
-                        val cities = searchCityUseCase(intent.query)
-                        dispatch(Msg.Content(cities))
+                        try {
+                            val cities = searchCityUseCase(intent.query)
+                            dispatch(Msg.Content(cities))
+                        } catch (e: Exception) {
+                            dispatch(Msg.SearchResultError)
+                        }
                     }
                 }
             }
