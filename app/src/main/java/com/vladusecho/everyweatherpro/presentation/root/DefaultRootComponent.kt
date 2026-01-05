@@ -11,13 +11,17 @@ import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.vladusecho.everyweatherpro.domain.entities.City
 import com.vladusecho.everyweatherpro.presentation.details.DefaultDetailsComponent
+import com.vladusecho.everyweatherpro.presentation.extensions.componentScope
 import com.vladusecho.everyweatherpro.presentation.favourite.DefaultFavouriteComponent
 import com.vladusecho.everyweatherpro.presentation.search.DefaultSearchComponent
 import com.vladusecho.everyweatherpro.presentation.search.OpenReason
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.lang.Thread.sleep
 import javax.inject.Inject
 
 class DefaultRootComponent @AssistedInject constructor (
@@ -78,7 +82,11 @@ class DefaultRootComponent @AssistedInject constructor (
                         navigation.push(Config.Details(it))
                     },
                     {
-                        navigation.pop()
+                        componentScope().launch {
+                            delay(500)
+                            navigation.pop()
+                        }
+
                     },
                     componentContext
                 )

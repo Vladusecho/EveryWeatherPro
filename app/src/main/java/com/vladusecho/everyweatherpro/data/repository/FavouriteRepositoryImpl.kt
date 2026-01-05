@@ -1,5 +1,6 @@
 package com.vladusecho.everyweatherpro.data.repository
 
+import android.util.Log
 import com.vladusecho.everyweatherpro.data.local.db.FavouriteCitiesDao
 import com.vladusecho.everyweatherpro.data.mappers.toDbModel
 import com.vladusecho.everyweatherpro.data.mappers.toEntities
@@ -21,7 +22,7 @@ class FavouriteRepositoryImpl @Inject constructor(
     override suspend fun checkIsFavourite(id: Int): Boolean = favouriteCitiesDao.checkIsFavourite(id)
 
     override suspend fun addToFavourite(city: City) = favouriteCitiesDao
-        .addToFavourite(city.toDbModel())
+        .addToFavourite(city.toDbModel()).also { Log.d("AddToFavourite", "work") }
 
     override suspend fun removeFromFavourite(id: Int) = favouriteCitiesDao
         .deleteFromFavourite(id)

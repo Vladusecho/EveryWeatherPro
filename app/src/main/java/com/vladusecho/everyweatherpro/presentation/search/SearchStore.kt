@@ -1,5 +1,6 @@
 package com.vladusecho.everyweatherpro.presentation.search
 
+import android.util.Log
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -8,6 +9,7 @@ import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.vladusecho.everyweatherpro.domain.entities.City
 import com.vladusecho.everyweatherpro.domain.usecases.ChangeFavouriteStateUseCase
 import com.vladusecho.everyweatherpro.domain.usecases.SearchCityUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.lang.Exception

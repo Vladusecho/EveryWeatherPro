@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,11 +24,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +45,7 @@ fun SearchContent(component: SearchComponent) {
 
     val state by component.model.collectAsState()
 
-    val focus = rememberSaveable {
+    val focus = remember {
         FocusRequester()
     }
 
@@ -50,77 +53,95 @@ fun SearchContent(component: SearchComponent) {
         focus.requestFocus()
     }
 
+    val colors1 = SearchBarDefaults.colors()
     SearchBar(
-        modifier = Modifier.focusRequester(focus),
-        query = state.searchQuery,
-        onQueryChange = {component.changeSearchQuery(it)},
-        onSearch = {component.onClickSearch(it)},
-        active = true,
-        onActiveChange = {},
-        leadingIcon = {
-            IconButton({component.onClickBack()}) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = null
-                )
-            }
+        inputField = {
+            SearchBarDefaults.InputField(
+                query = state.searchQuery,
+                onQueryChange = {component.changeSearchQuery(it)},
+                onSearch = {component.onClickSearch(it)},
+                expanded = true,
+                onExpandedChange = {},
+                leadingIcon = {
+                IconButton({component.onClickBack()}) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = null
+                    )
+                }
+            },
+                trailingIcon = {
+                IconButton({component.onClickSearch(state.searchQuery)}) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = null
+                    )
+                }
+            },
+                colors = colors1.inputFieldColors,
+            )
         },
-        trailingIcon = {
-            IconButton({component.onClickSearch(state.searchQuery)}) {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = null
-                )
-            }
-        }
-    ) {
+        expanded = true,
+        onExpandedChange = {
+            component.onClickBack()
+        },
+        modifier = Modifier.focusRequester(focus),
+        shape = SearchBarDefaults.inputFieldShape,
+        colors = colors1,
+        tonalElevation = SearchBarDefaults.TonalElevation,
+        shadowElevation = SearchBarDefaults.ShadowElevation,
+        windowInsets = SearchBarDefaults.windowInsets,
+        content = {
+            val searchState = state.searchState
 
-        val searchState = state.searchState
-
-        when(searchState) {
-            is SearchStore.State.SearchState.Content -> {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(16.dp)
-                ) {
-                    items(
-                        items = searchState.cities,
-                        key = {it.id}
-                    ) { city ->
-                        CityCard(
-                            city = city
-                        ) {
-                            component.onClickCity(city = city)
+            when (searchState) {
+                is SearchStore.State.SearchState.Content -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        contentPadding = PaddingValues(16.dp)
+                    ) {
+                        items(
+                            items = searchState.cities,
+                            key = { it.id }
+                        ) { city ->
+                            CityCard(
+                                city = city
+                            ) {
+                                component.onClickCity(city = city)
+                            }
                         }
                     }
                 }
-            }
-            SearchStore.State.SearchState.EmptyResult -> {
-                Text(
-                    text = "По вашему запросу ничего не найдено...",
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
-            SearchStore.State.SearchState.Error -> {
-                Text(
-                    text = "Что-то пошло не так...",
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
-            SearchStore.State.SearchState.Initial -> {}
-            SearchStore.State.SearchState.Loading -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.onBackground
+
+                SearchStore.State.SearchState.EmptyResult -> {
+                    Text(
+                        text = "По вашему запросу ничего не найдено...",
+                        modifier = Modifier.padding(8.dp)
                     )
                 }
+
+                SearchStore.State.SearchState.Error -> {
+                    Text(
+                        text = "Что-то пошло не так...",
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+
+                SearchStore.State.SearchState.Initial -> {}
+                SearchStore.State.SearchState.Loading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
+                }
             }
-        }
-    }
+        },
+    )
 }
 
 @Composable
@@ -134,7 +155,7 @@ private fun CityCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onCityClick(city)}
+                .clickable { onCityClick(city) }
                 .padding(
                     vertical = 8.dp,
                     horizontal = 16.dp
