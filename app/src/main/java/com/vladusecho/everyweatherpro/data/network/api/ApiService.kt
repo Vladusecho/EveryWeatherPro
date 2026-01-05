@@ -11,13 +11,15 @@ interface ApiService {
 
     @GET("current.json")
     suspend fun loadCurrentWeather(
-        @Query("q") query: String
+        @Query("q") query: String,
+        @Query("lang") lang: String = "ru"
     ): WeatherCurrentDto
 
     @GET("forecast.json")
     suspend fun loadForecast(
         @Query("q") query: String,
-        @Query("days") daysCount: Int = 4
+        @Query("days") daysCount: Int = 4,
+        @Query("lang") lang: String = "ru"
     ): WeatherForecastDto
 
     @GET("search.json")

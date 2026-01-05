@@ -7,4 +7,8 @@ data class Weather(
     val description: String,
     val descriptionIcon: String,
     val date: Calendar
-)
+) {
+
+    val correctIconUrl
+        get() = "https:$descriptionIcon"
+}

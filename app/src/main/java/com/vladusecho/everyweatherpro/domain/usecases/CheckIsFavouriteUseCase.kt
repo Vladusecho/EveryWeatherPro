@@ -7,5 +7,5 @@ class CheckIsFavouriteUseCase @Inject constructor(
     private val repository: FavouriteRepository
 ) {
 
-    operator fun invoke(id: Int) = repository.checkIsFavourite(id)
+    suspend operator fun invoke(id: Int) = repository.checkIsFavourite(id)
 }

@@ -12,6 +12,7 @@ import com.vladusecho.everyweatherpro.domain.usecases.CheckIsFavouriteUseCase
 import com.vladusecho.everyweatherpro.domain.usecases.GetForecastUseCase
 import com.vladusecho.everyweatherpro.domain.usecases.ObserveFavouriteStateUseCase
 import com.vladusecho.everyweatherpro.presentation.details.DetailsStoreFactory.ExecutorImpl
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -124,7 +125,7 @@ class DetailsStoreFactory @Inject constructor(
                     publish(DetailsStore.Label.ClickBack)
                 }
                 DetailsStore.Intent.ClickChangeFavouriteStatus -> {
-                    scope.launch {
+                    scope.launch(Dispatchers.IO) {
                         val isFavourite = checkIsFavouriteUseCase(city.id)
                         if (isFavourite) {
                             changeFavouriteStateUseCase.removeFromFavourite(city.id)
