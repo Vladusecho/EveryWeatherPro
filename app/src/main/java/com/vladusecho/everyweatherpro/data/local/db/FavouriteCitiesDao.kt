@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FavouriteCitiesDao {
 
-    @Query("SELECT * FROM favourite_cities")
+    @Query("SELECT * FROM favourite_cities ORDER BY id")
     fun getFavouriteCities(): Flow<List<CityDbModel>>
 
     @Query("SELECT EXISTS (SELECT * FROM favourite_cities WHERE id=:id LIMIT 1)")
