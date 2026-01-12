@@ -19,9 +19,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material3.Card
@@ -131,7 +133,26 @@ private fun TopBar(
 private fun Initial() {}
 
 @Composable
-private fun Error() {}
+private fun Error() {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Row(
+            modifier = Modifier
+                .align(Alignment.Center)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Error,
+                contentDescription = null
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(
+                text = "При загрузке данных произошла ошибка!"
+            )
+        }
+
+    }
+}
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable

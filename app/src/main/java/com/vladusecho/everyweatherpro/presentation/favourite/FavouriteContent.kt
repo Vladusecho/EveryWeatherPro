@@ -14,32 +14,35 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EditNote
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.vladusecho.everyweatherpro.presentation.extensions.tempToString
+import com.vladusecho.everyweatherpro.presentation.ui.theme.CardGradients
 
 @Composable
 fun FavouriteContent(
@@ -57,6 +60,26 @@ fun FavouriteContent(
         verticalArrangement = Arrangement.spacedBy(24.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        item(span = { GridItemSpan(2) }) {
+
+                Box(
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "EveryWeatherPro",
+                            style = MaterialTheme.typography.headlineLarge
+                        )
+                        Text(
+                            text = "Made by Vladusecho <3",
+                            style = MaterialTheme.typography.labelSmall
+                        )
+                    }
+                }
+
+        }
         item(span = { GridItemSpan(2) }) {
             SearchCard {
                 component.onClickSearch()
@@ -91,20 +114,21 @@ private fun CityCard(
     ) {
         Box(
             modifier = Modifier
-                .background(Brush.linearGradient(listOf(Color(0xFFFFDF37), Color(0xFFFF5621))))
+                .background(CardGradients.getAllCardGradients()[cityItem.city.name.length % CardGradients.gradientsCount])
                 .fillMaxSize()
                 .sizeIn(minHeight = 190.dp)
-                .clickable{ onClick() }
+                .clickable { onClick() }
                 .padding(25.dp),
         ) {
-            when(val weatherState = cityItem.weatherState) {
+            when (val weatherState = cityItem.weatherState) {
                 is FavouriteStore.State.WeatherState.Content -> {
                     GlideImage(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
                             .size(55.dp),
                         model = weatherState.iconUrl,
-                        contentDescription = "")
+                        contentDescription = ""
+                    )
                     Text(
                         modifier = Modifier
                             .align(Alignment.BottomStart)
@@ -114,7 +138,29 @@ private fun CityCard(
                         color = MaterialTheme.colorScheme.background
                     )
                 }
-                FavouriteStore.State.WeatherState.Error -> {}
+
+                FavouriteStore.State.WeatherState.Error -> {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .clip(ShapeDefaults.Medium)
+                            .background(Color(0xD5CE0000))
+                            .padding(horizontal = 6.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Error,
+                            contentDescription = null
+                        )
+                        Spacer(modifier = Modifier.width(5.dp))
+                        Text(
+                            text = "Что-то пошло не так...",
+                            color = MaterialTheme.colorScheme.background,
+                            style = MaterialTheme.typography.labelSmall
+                        )
+                    }
+
+                }
+
                 FavouriteStore.State.WeatherState.Initial -> {}
                 FavouriteStore.State.WeatherState.Loading -> {
                     CircularProgressIndicator(
@@ -161,7 +207,8 @@ private fun AddToFavouriteCard(
                 contentDescription = ""
             )
             Spacer(modifier = Modifier.weight(1f))
-            Text(text = "Добавить город...",
+            Text(
+                text = "Добавить город...",
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.titleMedium
